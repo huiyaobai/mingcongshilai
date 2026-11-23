@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>名从诗来 · 诗经楚辞唐诗宋词起名</title>
+<style>
+:root{--indigo:#2B4C7E;--indigo2:#1E365C;--paper:#F7F3EA;--gold:#D9A441;--ink:#2A2620;--muted:#7A7264;--card:#FFFDF8;--line:#E6DDCC;--ok:#3E7A4E}
+*{box-sizing:border-box}
+body{margin:0;background:#EDE7DA;color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.55}
+h1,h2,h3,.serif{font-family:Georgia,"Songti SC","SimSun",serif}
+.wrap{max-width:480px;margin:0 auto;background:var(--paper);min-height:100vh;padding-bottom:84px}
+header{background:var(--indigo);color:#fff;padding:22px 18px 18px}
+header h1{margin:0;font-size:26px;letter-spacing:2px}
+header p{margin:6px 0 0;font-size:13px;opacity:.88}
+.goldbar{height:3px;background:var(--gold)}
+main{padding:14px 14px 6px}
+.tabpage{display:none}
+.tabpage.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input,select{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:9px;font-size:15px;background:#fff;color:var(--ink)}
+.row{display:flex;gap:10px}.row>div{flex:1}
+button{cursor:pointer}
+.btn{background:var(--indigo);color:#fff;border:0;border-radius:10px;padding:12px 16px;font-size:16px;width:100%}
+.btn.gold{background:var(--gold);color:#2A2620;font-weight:700}
+.btn.ghost{background:#fff;color:var(--indigo);border:1px solid var(--indigo)}
+.btn.small{width:auto;padding:8px 14px;font-size:14px}
+.hint{font-size:12.5px;color:var(--muted)}
+.result-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;text-align:left;width:100%;display:block}
+.result-card .nm{font-family:Georgia,"Songti SC",serif;font-size:22px;color:var(--indigo)}
+.score{font-size:20px;font-weight:700;color:var(--gold)}
+.tag{display:inline-block;background:#EFE8D6;color:#6B5B2E;border-radius:999px;padding:2px 9px;font-size:12px;margin-right:6px}
+.bar{height:8px;background:#EDE6D4;border-radius:99px;overflow:hidden;margin:4px 0 10px}
+.bar i{display:block;height:100%;background:var(--indigo)}
+.poem{background:#F1EBDC;border-left:3px solid var(--gold);padding:10px 12px;border-radius:0 8px 8px 0;font-family:Georgia,"Songti SC",serif}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:flex;z-index:10}
+nav button{flex:1;background:none;border:0;padding:11px 0 13px;font-size:14px;color:var(--muted)}
+nav button.active{color:var(--indigo);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px}
+.chip.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.surname-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.surname-grid button{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 0;font-size:16px}
+.kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.kv:last-child{border-bottom:0}
+footer{padding:14px;font-size:12px;color:var(--muted)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>名从诗来</h1><p>从诗经、楚辞、唐诗、宋词里，挑一个有出处的好名字</p></header>
+<div class="goldbar"></div>
+<main>
+<!-- 起名 -->
+<section id="tab-name" class="tabpage active">
+  <div class="card">
+    <h2 style="margin:0 0 4px">起名</h2>
+    <p class="hint" style="margin:0">只按你填的条件，从本应用自编的名字库里挑名字。出生时间只作记录显示，不影响评分。</p>
+    <label>姓氏</label><input id="f-surname" value="王" maxlength="2">
+    <div class="row">
+      <div><label>性别取向</label><select id="f-gender"><option value="">不限</option><option value="男">男孩</option><option value="女">女孩</option></select></div>
+      <div><label>字数</label><select id="f-len"><option value="">不限</option><option value="1">单字名</option><option value="2">双字名</option></select></div>
+    </div>
+    <div class="row">
+      <div><label>出生日期（可选）</label><input id="f-bdate" type="date"></div>
+      <div><label>出生时间（可选）</label><input id="f-btime" type="time"></div>
+    </div>
+    <label>出处</label><select id="f-src"><option value="">全部</option><option>诗经</option><option>楚辞</option><option>唐诗</option><option>宋词</option></select>
+    <label>风格</label><select id="f-style"><option value="">不限</option><option>清雅</option><option>温柔</option><option>豪迈</option><option>明朗</option><option>坚韧</option><option>灵动</option><option>文雅</option><option>典雅</option></select>
+    <div class="row">
+      <div><label>想要的字（可选，限1字）</label><input id="f-wanted" maxlength="1" placeholder="如：安"></div>
+      <div><label>不想要的字（可选）</label><input id="f-unwanted" placeholder="如：愁苦"></div>
+    </div>
+    <div style="height:14px"></div>
+    <button class="btn" id="btn-gen">生成名字</button>
+    <p class="hint" id="gen-note"></p>
+  </div>
+  <div id="results"></div>
+  <div id="detail" class="hidden"></div>
+</section>
+<!-- 测名 -->
+<section id="tab-test" class="tabpage">
+  <div class="card">
+    <h2 style="margin:0 0 4px">测名</h2>
+    <p class="hint" style="margin:0">输入全名查看逐字信息。如果名字在本名字库里，会显示出处与评分拆解；如果不在，只显示逐字信息，不编造出处与评分。</p>
+    <label>全名</label><input id="t-name" maxlength="4" placeholder="如：王清扬">
+    <div style="height:12px"></div>
+    <button class="btn" id="btn-test">查看名字</button>
+  </div>
+  <div id="test-out"></div>
+</section>
+<!-- 诗词 -->
+<section id="tab-poem" class="tabpage">
+  <div class="card">
+    <h2 style="margin:0 0 4px">诗词</h2>
+    <label>搜索诗句（按关键字）</label><input id="p-q" placeholder="如：明月 / 春风 / 江">
+    <div class="chips" id="p-chips"></div>
+  </div>
+  <div id="poem-list"></div>
+  <div id="poem-names"></div>
+</section>
+<!-- 我的 -->
+<section id="tab-mine" class="tabpage">
+  <div class="card"><h2 style="margin:0 0 6px">我的收藏</h2><div id="fav-list"></div><div style="height:10px"></div><button class="btn ghost small" id="btn-clear-fav">清空收藏</button></div>
+  <div class="card"><h2 style="margin:0 0 6px">最近看过</h2><div id="hist-list"></div><div style="height:10px"></div><button class="btn ghost small" id="btn-clear-hist">清空记录</button></div>
+  <div class="card"><h2 style="margin:0 0 6px">关于与说明</h2>
+    <p style="font-size:14px">「名从诗来」是一个原创小工具，不复制任何现有起名 App 的名称、标识、文案或数据。名字库由本应用自编，只取材于 1912 年以前的公版典籍：诗经、楚辞、唐诗、宋词。诗句均为公版原文，释义为自写短注。</p>
+    <p style="font-size:14px">评分是本应用自定的参考公式：寓意 40%、音律 30%、典籍 30%，只看名字本身，不看生辰八字。五行标注是传统说法，仅供参考，不是专业命理判断。本应用不提供付费起名、不登录、不收款。</p>
+    <p style="font-size:14px">收藏与记录只保存在你这台设备的浏览器里（localStorage），不上传。</p>
+  </div>
+  <div class="card"><h2 style="margin:0 0 6px">百家姓</h2><p class="hint" style="margin:0 0 8px">点一个姓，会填到起名页。姓氏来源说法较多，这里只写一句常见说法。</p><div class="surname-grid" id="surname-grid"></div><div id="surname-note" style="margin-top:10px"></div></div>
+</section>
+</main>
+<footer>评分与五行标注仅供参考，不作专业命理判断。诗句为公版原文，释义自写。</footer>
+</div>
+<nav>
+  <button data-tab="tab-name" class="active">起名</button>
+  <button data-tab="tab-test">测名</button>
+  <button data-tab="tab-poem">诗词</button>
+  <button data-tab="tab-mine">我的</button>
+</nav>
+<script>
+const NAMES=[
+{n:"子衿",py:"zǐ jīn",tones:[3,1],g:"通用",src:"诗经",work:"诗经·郑风·子衿",line:"青青子衿，悠悠我心。",gloss:"子衿是读书人的衣领，借来指有文气的少年，也寄托悠悠思念。",yi:92,tags:["清雅","文雅"]},
+{n:"子佩",py:"zǐ pèi",tones:[3,4],g:"通用",src:"诗经",work:"诗经·郑风·子衿",line:"青青子佩，悠悠我思。",gloss:"子佩是少年腰间的玉佩，温润端正，思念也含蓄不张扬。",yi:90,tags:["清雅","文雅"]},
+{n:"静姝",py:"jìng shū",tones:[4,1],g:"女",src:"诗经",work:"诗经·邶风·静女",line:"静女其姝，俟我于城隅。",gloss:"安静而美好，站在城角等候，画面干净又温柔。",yi:93,tags:["温柔","典雅"]},
+{n:"采薇",py:"cǎi wēi",tones:[3,1],g:"女",src:"诗经",work:"诗经·小雅·采薇",line:"采薇采薇，薇亦作止。",gloss:"采摘野菜的动作里有田野气，也带着远行人的坚韧。",yi:91,tags:["清雅","坚韧"]},
+{n:"采蘩",py:"cǎi fán",tones:[3,2],g:"女",src:"诗经",work:"诗经·召南·采蘩",line:"于以采蘩？于沼于沚。",gloss:"在水边采白蒿，勤快利落，是劳动里生出的清新名字。",yi:88,tags:["清雅","灵动"]},
+{n:"燕燕",py:"yàn yàn",tones:[4,4],g:"女",src:"诗经",work:"诗经·邶风·燕燕",line:"燕燕于飞，差池其羽。",gloss:"燕子飞翔，翅膀参差，轻盈又带着离别时的不舍。",yi:89,tags:["温柔","灵动"]},
+{n:"桃夭",py:"táo yāo",tones:[2,1],g:"女",src:"诗经",work:"诗经·周南·桃夭",line:"桃之夭夭，灼灼其华。",gloss:"桃花开得茂盛鲜艳，祝愿人如桃花，明媚又有生气。",yi:92,tags:["温柔","明朗"]},
+{n:"灼华",py:"zhuó huá",tones:[2,2],g:"女",src:"诗经",work:"诗经·周南·桃夭",line:"桃之夭夭，灼灼其华。",gloss:"花开灿烂的样子，光彩照人而不俗气。",yi:91,tags:["明朗","温柔"]},
+{n:"宜家",py:"yí jiā",tones:[2,1],g:"女",src:"诗经",work:"诗经·周南·桃夭",line:"之子于归，宜其室家。",gloss:"出嫁后把家里打理得和和美美，是最朴素的祝福。",yi:91,tags:["温柔","典雅"]},
+{n:"呦呦",py:"yōu yōu",tones:[1,1],g:"通用",src:"诗经",work:"诗经·小雅·鹿鸣",line:"呦呦鹿鸣，食野之苹。",gloss:"鹿的叫声，配上野地里的萍草，是宾客欢聚的热闹声。",yi:88,tags:["灵动","清雅"]},
+{n:"鹿鸣",py:"lù míng",tones:[4,2],g:"男",src:"诗经",work:"诗经·小雅·鹿鸣",line:"呦呦鹿鸣，食野之苹。",gloss:"鹿鸣声声，取其和乐与待客之诚，也显开朗。",yi:89,tags:["明朗","豪迈"]},
+{n:"丁丁",py:"dīng dīng",tones:[1,1],g:"男",src:"诗经",work:"诗经·小雅·伐木",line:"伐木丁丁，鸟鸣嘤嘤。",gloss:"伐木的声响一下一下，踏实勤勉，像做事有节奏的人。",yi:88,tags:["坚韧","明朗"]},
+{n:"关关",py:"guān guān",tones:[1,1],g:"通用",src:"诗经",work:"诗经·周南·关雎",line:"关关雎鸠，在河之洲。",gloss:"水鸟在河洲上和鸣，声音成双，意境安静悠远。",yi:88,tags:["清雅","灵动"]},
+{n:"窈窕",py:"yǎo tiǎo",tones:[3,3],g:"女",src:"诗经",work:"诗经·周南·关雎",line:"窈窕淑女，君子好逑。",gloss:"身姿美好、心性端淑，是诗里最出名的赞美。",yi:92,tags:["温柔","典雅"]},
+{n:"蒹葭",py:"jiān jiā",tones:[1,1],g:"通用",src:"诗经",work:"诗经·秦风·蒹葭",line:"蒹葭苍苍，白露为霜。",gloss:"芦苇苍苍，白露成霜，秋天的清寒里有一种远意。",yi:91,tags:["清雅","文雅"]},
+{n:"伊人",py:"yī rén",tones:[1,2],g:"女",src:"诗经",work:"诗经·秦风·蒹葭",line:"所谓伊人，在水一方。",gloss:"水那边的那个人，可望而不可即，思念因此格外动人。",yi:92,tags:["清雅","文雅"]},
+{n:"白露",py:"bái lù",tones:[2,4],g:"女",src:"诗经",work:"诗经·秦风·蒹葭",line:"蒹葭苍苍，白露为霜。",gloss:"清晨的露水，干净透亮，带一点秋天的凉意。",yi:91,tags:["清雅","灵动"]},
+{n:"清扬",py:"qīng yáng",tones:[1,2],g:"女",src:"诗经",work:"诗经·郑风·野有蔓草",line:"有美一人，清扬婉兮。",gloss:"眉目清秀、神态婉约，是夸人长得好看又耐看。",yi:93,tags:["清雅","温柔"]},
+{n:"婉兮",py:"wǎn xī",tones:[3,1],g:"女",src:"诗经",work:"诗经·郑风·野有蔓草",line:"有美一人，清扬婉兮。",gloss:"婉约动人的样子，语气轻，姿态也轻。",yi:92,tags:["温柔","典雅"]},
+{n:"舒窈",py:"shū yǎo",tones:[1,3],g:"女",src:"诗经",work:"诗经·陈风·月出",line:"舒窈纠兮，劳心悄兮。",gloss:"舒缓而美好，让人心里安静下来，也让人牵挂。",yi:91,tags:["温柔","典雅"]},
+{n:"如玉",py:"rú yù",tones:[2,4],g:"通用",src:"诗经",work:"诗经·秦风·小戎",line:"言念君子，温其如玉。",gloss:"温润得像玉一样，是对品性最常见的比方，也最耐用。",yi:94,tags:["温柔","典雅"]},
+{n:"景行",py:"jǐng xíng",tones:[3,2],g:"男",src:"诗经",work:"诗经·小雅·车辖",line:"高山仰止，景行行止。",gloss:"大道平坦光明，德行可以效法，志向要走正路。",yi:93,tags:["豪迈","文雅"]},
+{n:"思齐",py:"sī qí",tones:[1,2],g:"女",src:"诗经",work:"诗经·大雅·思齐",line:"思齐大任，文王之母。",gloss:"思念贤德齐整的母亲，也愿自己心齐行正。",yi:91,tags:["文雅","典雅"]},
+{n:"穆清",py:"mù qīng",tones:[4,1],g:"通用",src:"诗经",work:"诗经·大雅·烝民",line:"吉甫作诵，穆如清风。",gloss:"和穆得像清风一样，性情温和，待人有分寸。",yi:92,tags:["清雅","文雅"]},
+{n:"清风",py:"qīng fēng",tones:[1,1],g:"通用",src:"诗经",work:"诗经·大雅·烝民",line:"吉甫作诵，穆如清风。",gloss:"清爽的风，来去无碍，愿人行事清白、心境清凉。",yi:91,tags:["清雅","明朗"]},
+{n:"鹤鸣",py:"hè míng",tones:[4,2],g:"男",src:"诗经",work:"诗经·小雅·鹤鸣",line:"鹤鸣于九皋，声闻于野。",gloss:"鹤在深泽里鸣叫，声音传到野外，志向藏得深也传得远。",yi:91,tags:["豪迈","清雅"]},
+{n:"九皋",py:"jiǔ gāo",tones:[3,1],g:"男",src:"诗经",work:"诗经·小雅·鹤鸣",line:"鹤鸣于九皋，声闻于野。",gloss:"水边深泽，鹤鸣之所，取其幽深高远。",yi:90,tags:["豪迈","坚韧"]},
+{n:"维桢",py:"wéi zhēn",tones:[2,1],g:"男",src:"诗经",work:"诗经·大雅·文王",line:"王国克生，维周之桢。",gloss:"国家的栋梁，屋宇的干材，愿人长成能担当的人。",yi:92,tags:["坚韧","文雅"]},
+{n:"灵均",py:"líng jūn",tones:[2,1],g:"男",src:"楚辞",work:"楚辞·离骚",line:"名余曰正则兮，字余曰灵均。",gloss:"灵是善，均为平，愿人心善而行事公平。",yi:93,tags:["文雅","清雅"]},
+{n:"正则",py:"zhèng zé",tones:[4,2],g:"男",src:"楚辞",work:"楚辞·离骚",line:"名余曰正则兮，字余曰灵均。",gloss:"名字取正，法则端方，行事有规矩。",yi:92,tags:["文雅","坚韧"]},
+{n:"修远",py:"xiū yuǎn",tones:[1,3],g:"男",src:"楚辞",work:"楚辞·离骚",line:"路漫漫其修远兮，吾将上下而求索。",gloss:"路还长，远方还远，肯一直走下去就是本事。",yi:93,tags:["坚韧","豪迈"]},
+{n:"求索",py:"qiú suǒ",tones:[2,3],g:"男",src:"楚辞",work:"楚辞·离骚",line:"路漫漫其修远兮，吾将上下而求索。",gloss:"上下求索，不怕路远，取其探索到底的劲头。",yi:92,tags:["坚韧","文雅"]},
+{n:"怀瑾",py:"huái jǐn",tones:[2,3],g:"男",src:"楚辞",work:"楚辞·九章·怀沙",line:"怀瑾握瑜兮，穷不知所示。",gloss:"怀里揣着美玉，品行像玉一样经得起看。",yi:93,tags:["典雅","清雅"]},
+{n:"握瑜",py:"wò yú",tones:[4,2],g:"男",src:"楚辞",work:"楚辞·九章·怀沙",line:"怀瑾握瑜兮，穷不知所示。",gloss:"手里握着美玉，纵然处境艰难也不改本色。",yi:92,tags:["典雅","清雅"]},
+{n:"嘉树",py:"jiā shù",tones:[1,4],g:"男",src:"楚辞",work:"楚辞·离骚",line:"后皇嘉树，橘徕服兮。",gloss:"美好的树木，生在南方不迁徙，守得住本性。",yi:91,tags:["坚韧","明朗"]},
+{n:"江离",py:"jiāng lí",tones:[1,2],g:"通用",src:"楚辞",work:"楚辞·离骚",line:"扈江离与辟芷兮，纫秋兰以为佩。",gloss:"一种香草，佩在身上满是香气，取其洁净芬芳。",yi:90,tags:["清雅","灵动"]},
+{n:"秋兰",py:"qiū lán",tones:[1,2],g:"女",src:"楚辞",work:"楚辞·离骚",line:"扈江离与辟芷兮，纫秋兰以为佩。",gloss:"秋天的兰花，香而不艳，佩在身上提醒自己守洁。",yi:92,tags:["清雅","温柔"]},
+{n:"芳菲",py:"fāng fēi",tones:[1,1],g:"女",src:"楚辞",work:"楚辞·离骚",line:"佩缤纷其繁饰兮，芳菲菲其弥章。",gloss:"香气浓郁而久远，越是繁饰，香气越显。",yi:91,tags:["温柔","清雅"]},
+{n:"昭质",py:"zhāo zhì",tones:[1,4],g:"通用",src:"楚辞",work:"楚辞·离骚",line:"芳与泽其杂糅兮，唯昭质其犹未亏。",gloss:"光明的本质没有亏损，纵然混杂也不改。",yi:92,tags:["清雅","文雅"]},
+{n:"峻茂",py:"jùn mào",tones:[4,4],g:"男",src:"楚辞",work:"楚辞·离骚",line:"冀枝叶之峻茂兮，愿俟时乎吾将刈。",gloss:"枝叶高大茂盛，等到时机再收成，取其生长的力量。",yi:91,tags:["坚韧","豪迈"]},
+{n:"灵修",py:"líng xiū",tones:[2,1],g:"男",src:"楚辞",work:"楚辞·离骚",line:"怨灵修之浩荡兮，终不察夫民心。",gloss:"原指受尊敬的人，借来作名，愿人有修养、受敬重。",yi:90,tags:["文雅","清雅"]},
+{n:"婵媛",py:"chán yuàn",tones:[2,4],g:"女",src:"楚辞",work:"楚辞·离骚",line:"女嬃之婵媛兮，申申其詈予。",gloss:"言辞恳切、情意绵长，是姐姐般的温柔劝告。",yi:91,tags:["温柔","典雅"]},
+{n:"袅袅",py:"niǎo niǎo",tones:[3,3],g:"女",src:"楚辞",work:"楚辞·九歌·湘夫人",line:"袅袅兮秋风，洞庭波兮木叶下。",gloss:"秋风轻柔地吹，姿态柔美，画面也安静。",yi:90,tags:["温柔","灵动"]},
+{n:"沅芷",py:"yuán zhǐ",tones:[2,3],g:"女",src:"楚辞",work:"楚辞·九歌·湘夫人",line:"沅有芷兮澧有兰，思公子兮未敢言。",gloss:"沅水边的白芷，香草名，思念藏在心里不说出口。",yi:92,tags:["清雅","温柔"]},
+{n:"澧兰",py:"lǐ lán",tones:[3,2],g:"女",src:"楚辞",work:"楚辞·九歌·湘夫人",line:"沅有芷兮澧有兰，思公子兮未敢言。",gloss:"澧水边的兰花，与沅芷成对，都是香洁的象征。",yi:91,tags:["清雅","温柔"]},
+{n:"望舒",py:"wàng shū",tones:[4,1],g:"通用",src:"楚辞",work:"楚辞·离骚",line:"前望舒使先驱兮，后飞廉使奔属。",gloss:"传说中为月亮驾车的人，行在前面开路，气派开阔。",yi:91,tags:["明朗","清雅"]},
+{n:"飞廉",py:"fēi lián",tones:[1,2],g:"男",src:"楚辞",work:"楚辞·离骚",line:"前望舒使先驱兮，后飞廉使奔属。",gloss:"传说中的风神，跟在后面奔走，取其来去如风。",yi:89,tags:["豪迈","灵动"]},
+{n:"陆离",py:"lù lí",tones:[4,2],g:"通用",src:"楚辞",work:"楚辞·离骚",line:"带长铗之陆离兮，冠切云之崔嵬。",gloss:"光彩错杂、绚烂夺目的样子，佩饰华美而不乱。",yi:90,tags:["清雅","灵动"]},
+{n:"安歌",py:"ān gē",tones:[1,1],g:"女",src:"楚辞",work:"楚辞·九歌·东皇太一",line:"疏缓节兮安歌，陈竽瑟兮浩倡。",gloss:"放慢节奏、安然唱歌，是祭祀里从容的一段。",yi:90,tags:["温柔","清雅"]},
+{n:"瑶席",py:"yáo xí",tones:[2,2],g:"女",src:"楚辞",work:"楚辞·九歌·东皇太一",line:"瑶席兮玉瑱，盍将把兮琼芳。",gloss:"美玉做的席子，华贵洁净，取其珍重之意。",yi:91,tags:["典雅","清雅"]},
+{n:"明月",py:"míng yuè",tones:[2,4],g:"通用",src:"唐诗",work:"李白《静夜思》",line:"举头望明月，低头思故乡。",gloss:"抬头是月，低头是乡愁，一轮明月照着所有远行的人。",yi:92,tags:["明朗","清雅"]},
+{n:"孤云",py:"gū yún",tones:[1,2],g:"男",src:"唐诗",work:"李白《独坐敬亭山》",line:"众鸟高飞尽，孤云独去闲。",gloss:"天上只剩一片云独自飘走，闲淡里有一种自在。",yi:90,tags:["清雅","坚韧"]},
+{n:"长风",py:"cháng fēng",tones:[2,1],g:"男",src:"唐诗",work:"李白《行路难》",line:"长风破浪会有时，直挂云帆济沧海。",gloss:"大风总会来，破浪总有时，取其不向难处低头的气概。",yi:93,tags:["豪迈","明朗"]},
+{n:"云帆",py:"yún fān",tones:[2,1],g:"男",src:"唐诗",work:"李白《行路难》",line:"长风破浪会有时，直挂云帆济沧海。",gloss:"高高挂起的船帆，等风来就远行，志向要张满。",yi:92,tags:["豪迈","明朗"]},
+{n:"沧海",py:"cāng hǎi",tones:[1,3],g:"男",src:"唐诗",work:"李白《行路难》",line:"长风破浪会有时，直挂云帆济沧海。",gloss:"大海辽阔，渡过去就是新天地，取其胸怀与远志。",yi:91,tags:["豪迈","坚韧"]},
+{n:"逸兴",py:"yì xìng",tones:[4,4],g:"男",src:"唐诗",work:"李白《宣州谢朓楼饯别校书叔云》",line:"俱怀逸兴壮思飞，欲上青天览明月。",gloss:"超逸的兴致和壮阔的思绪一起飞，想登上青天看月亮。",yi:91,tags:["豪迈","文雅"]},
+{n:"桃花",py:"táo huā",tones:[2,1],g:"女",src:"唐诗",work:"李白《赠汪伦》",line:"桃花潭水深千尺，不及汪伦送我情。",gloss:"桃花潭的水再深，也比不上送别的情意，花也因此动人。",yi:91,tags:["温柔","明朗"]},
+{n:"白鹭",py:"bái lù",tones:[2,4],g:"女",src:"唐诗",work:"李白《登金陵凤凰台》",line:"三山半落青天外，二水中分白鹭洲。",gloss:"江心的白鹭洲，一半青山一半江水，画面干净开阔。",yi:91,tags:["清雅","灵动"]},
+{n:"春风",py:"chūn fēng",tones:[1,1],g:"通用",src:"唐诗",work:"李白《春夜洛城闻笛》",line:"谁家玉笛暗飞声，散入春风满洛城。",gloss:"笛声散进春风里，满城都是春天，温柔又热闹。",yi:91,tags:["明朗","清雅"]},
+{n:"玉笛",py:"yù dí",tones:[4,2],g:"女",src:"唐诗",work:"李白《春夜洛城闻笛》",line:"谁家玉笛暗飞声，散入春风满洛城。",gloss:"不知谁家的玉笛在夜里响起，声音清亮，惹人思念。",yi:90,tags:["清雅","灵动"]},
+{n:"长江",py:"cháng jiāng",tones:[2,1],g:"男",src:"唐诗",work:"杜甫《登高》",line:"无边落木萧萧下，不尽长江滚滚来。",gloss:"落叶无边，长江不尽，江水滚滚向前，不回头。",yi:92,tags:["豪迈","明朗"]},
+{n:"萧萧",py:"xiāo xiāo",tones:[1,1],g:"通用",src:"唐诗",work:"杜甫《登高》",line:"无边落木萧萧下，不尽长江滚滚来。",gloss:"落叶萧萧落下的声音，秋意浓，也显苍劲。",yi:89,tags:["清雅","坚韧"]},
+{n:"春雨",py:"chūn yǔ",tones:[1,3],g:"通用",src:"唐诗",work:"杜甫《春夜喜雨》",line:"好雨知时节，当春乃发生。",gloss:"好雨懂得时节，春天一到就落下来，润物无声。",yi:92,tags:["温柔","清雅"]},
+{n:"润物",py:"rùn wù",tones:[4,4],g:"通用",src:"唐诗",work:"杜甫《春夜喜雨》",line:"随风潜入夜，润物细无声。",gloss:"夜里悄悄滋润万物，不声张，做好事也不求人知。",yi:91,tags:["温柔","文雅"]},
+{n:"空山",py:"kōng shān",tones:[1,1],g:"通用",src:"唐诗",work:"王维《山居秋暝》",line:"空山新雨后，天气晚来秋。",gloss:"雨后的空山格外安静，傍晚的秋意刚刚来到。",yi:90,tags:["清雅","文雅"]},
+{n:"清泉",py:"qīng quán",tones:[1,2],g:"通用",src:"唐诗",work:"王维《山居秋暝》",line:"明月松间照，清泉石上流。",gloss:"清泉在石头上流过，又清又凉，心里也跟着干净。",yi:92,tags:["清雅","灵动"]},
+{n:"红豆",py:"hóng dòu",tones:[2,4],g:"女",src:"唐诗",work:"王维《相思》",line:"红豆生南国，春来发几枝。",gloss:"南国的红豆，春天发了几枝，是相思的信物。",yi:92,tags:["温柔","典雅"]},
+{n:"相思",py:"xiāng sī",tones:[1,1],g:"女",src:"唐诗",work:"王维《相思》",line:"愿君多采撷，此物最相思。",gloss:"愿你多采一些红豆，它最能寄托相思。",yi:91,tags:["温柔","典雅"]},
+{n:"春晓",py:"chūn xiǎo",tones:[1,3],g:"通用",src:"唐诗",work:"孟浩然《春晓》",line:"春眠不觉晓，处处闻啼鸟。",gloss:"春天的觉睡得香，不知天亮，到处是鸟叫声。",yi:91,tags:["明朗","清雅"]},
+{n:"花落",py:"huā luò",tones:[1,4],g:"女",src:"唐诗",work:"孟浩然《春晓》",line:"夜来风雨声，花落知多少。",gloss:"夜里风雨过后，不知落了多少花，怜惜里带着春意。",yi:89,tags:["清雅","温柔"]},
+{n:"残阳",py:"cán yáng",tones:[2,2],g:"男",src:"唐诗",work:"白居易《暮江吟》",line:"一道残阳铺水中，半江瑟瑟半江红。",gloss:"落日的余晖铺在水面上，半江青绿半江红，晚景壮美。",yi:89,tags:["明朗","豪迈"]},
+{n:"真珠",py:"zhēn zhū",tones:[1,1],g:"女",src:"唐诗",work:"白居易《暮江吟》",line:"可怜九月初三夜，露似真珠月似弓。",gloss:"露水像真珠，月亮像一张弓，夜色可爱又精致。",yi:91,tags:["典雅","温柔"]},
+{n:"江枫",py:"jiāng fēng",tones:[1,1],g:"男",src:"唐诗",work:"张继《枫桥夜泊》",line:"月落乌啼霜满天，江枫渔火对愁眠。",gloss:"江边的枫树和渔船上的灯火，陪着夜里难眠的人。",yi:91,tags:["清雅","文雅"]},
+{n:"渔火",py:"yú huǒ",tones:[2,3],g:"通用",src:"唐诗",work:"张继《枫桥夜泊》",line:"月落乌啼霜满天，江枫渔火对愁眠。",gloss:"江上渔船的一点灯火，夜里最暖的一盏光。",yi:90,tags:["清雅","灵动"]},
+{n:"把酒",py:"bǎ jiǔ",tones:[3,3],g:"男",src:"宋词",work:"苏轼《水调歌头》",line:"明月几时有？把酒问青天。",gloss:"端起酒杯问青天，月亮几时才有，问得豪迈也问得真诚。",yi:91,tags:["豪迈","明朗"]},
+{n:"婵娟",py:"chán juān",tones:[2,1],g:"女",src:"宋词",work:"苏轼《水调歌头》",line:"但愿人长久，千里共婵娟。",gloss:"婵娟是美好的月色，也指美好的人，千里之外共看一轮月。",yi:93,tags:["温柔","典雅"]},
+{n:"长久",py:"cháng jiǔ",tones:[2,3],g:"通用",src:"宋词",work:"苏轼《水调歌头》",line:"但愿人长久，千里共婵娟。",gloss:"但愿人能长长久久，是最实在的祝福。",yi:92,tags:["温柔","文雅"]},
+{n:"大江",py:"dà jiāng",tones:[4,1],g:"男",src:"宋词",work:"苏轼《念奴娇·赤壁怀古》",line:"大江东去，浪淘尽，千古风流人物。",gloss:"大江向东流去，浪花淘尽了千古人物，气势开阔。",yi:92,tags:["豪迈","明朗"]},
+{n:"风流",py:"fēng liú",tones:[1,2],g:"男",src:"宋词",work:"苏轼《念奴娇·赤壁怀古》",line:"大江东去，浪淘尽，千古风流人物。",gloss:"风流人物是才情与功业兼备的人，愿人活得有风采。",yi:90,tags:["豪迈","文雅"]},
+{n:"惊涛",py:"jīng tāo",tones:[1,1],g:"男",src:"宋词",work:"苏轼《念奴娇·赤壁怀古》",line:"乱石穿空，惊涛拍岸，卷起千堆雪。",gloss:"惊人的浪涛拍打岸边，卷起雪一样的浪花，气势逼人。",yi:91,tags:["豪迈","坚韧"]},
+{n:"绿肥",py:"lǜ féi",tones:[4,2],g:"女",src:"宋词",work:"李清照《如梦令》",line:"知否，知否？应是绿肥红瘦。",gloss:"绿叶肥厚，红花瘦了，写雨后海棠的样子，也写时光。",yi:89,tags:["清雅","灵动"]},
+{n:"红瘦",py:"hóng shòu",tones:[2,4],g:"女",src:"宋词",work:"李清照《如梦令》",line:"知否，知否？应是绿肥红瘦。",gloss:"红花被雨打得瘦了，娇弱里有一种惹人怜惜的美。",yi:89,tags:["温柔","清雅"]},
+{n:"海棠",py:"hǎi táng",tones:[3,2],g:"女",src:"宋词",work:"李清照《如梦令》",line:"试问卷帘人，却道海棠依旧。",gloss:"卷帘人说海棠依旧开着，花事未残，春意还在。",yi:92,tags:["温柔","明朗"]},
+{n:"雨疏",py:"yǔ shū",tones:[3,1],g:"通用",src:"宋词",work:"李清照《如梦令》",line:"昨夜雨疏风骤，浓睡不消残酒。",gloss:"昨夜雨下得稀疏，风却来得急，夜里的一场雨写得真实。",yi:90,tags:["清雅","灵动"]},
+{n:"卷帘",py:"juàn lián",tones:[4,2],g:"通用",src:"宋词",work:"李清照《如梦令》",line:"试问卷帘人，却道海棠依旧。",gloss:"卷起帘子的人回答说海棠依旧，动作轻，回答也轻。",yi:89,tags:["清雅","灵动"]},
+{n:"寻寻",py:"xún xún",tones:[2,2],g:"女",src:"宋词",work:"李清照《声声慢》",line:"寻寻觅觅，冷冷清清，凄凄惨惨戚戚。",gloss:"寻寻觅觅是不断寻找的样子，取其执着，不取词里的愁绪。",yi:87,tags:["温柔","文雅"]},
+{n:"新词",py:"xīn cí",tones:[1,2],g:"通用",src:"宋词",work:"辛弃疾《丑奴儿·书博山道中壁》",line:"少年不识愁滋味，爱上层楼。爱上层楼，为赋新词强说愁。",gloss:"为了写新词，勉强说愁，少年心事写得诚实可爱。",yi:90,tags:["文雅","清雅"]},
+{n:"蓦然",py:"mò rán",tones:[4,2],g:"通用",src:"宋词",work:"辛弃疾《青玉案·元夕》",line:"蓦然回首，那人却在，灯火阑珊处。",gloss:"猛然回头，那个人就在灯火稀疏的地方，惊喜只在一瞬间。",yi:91,tags:["清雅","文雅"]},
+{n:"阑珊",py:"lán shān",tones:[2,1],g:"女",src:"宋词",work:"辛弃疾《青玉案·元夕》",line:"蓦然回首，那人却在，灯火阑珊处。",gloss:"灯火稀疏零落的地方，反而藏着最动人的相遇。",yi:91,tags:["清雅","温柔"]},
+{n:"灯火",py:"dēng huǒ",tones:[1,3],g:"通用",src:"宋词",work:"辛弃疾《青玉案·元夕》",line:"蓦然回首，那人却在，灯火阑珊处。",gloss:"元夕的灯火，热闹里留一点安静，等人回头。",yi:90,tags:["明朗","灵动"]},
+{n:"东风",py:"dōng fēng",tones:[1,1],g:"通用",src:"宋词",work:"辛弃疾《青玉案·元夕》",line:"东风夜放花千树，更吹落、星如雨。",gloss:"东风在夜里放出千树花灯，又吹落星星一样的雨点。",yi:91,tags:["明朗","豪迈"]},
+{n:"星雨",py:"xīng yǔ",tones:[1,3],g:"女",src:"宋词",work:"辛弃疾《青玉案·元夕》",line:"东风夜放花千树，更吹落、星如雨。",gloss:"星星像雨一样落下来，元夕的夜空最热闹也最亮。",yi:92,tags:["明朗","灵动"]},
+{n:"凤箫",py:"fèng xiāo",tones:[4,1],g:"女",src:"宋词",work:"辛弃疾《青玉案·元夕》",line:"凤箫声动，玉壶光转，一夜鱼龙舞。",gloss:"凤箫吹响，玉壶的光转来转去，一夜都是鱼龙灯舞。",yi:91,tags:["典雅","清雅"]},
+{n:"玉壶",py:"yù hú",tones:[4,2],g:"通用",src:"宋词",work:"辛弃疾《青玉案·元夕》",line:"凤箫声动，玉壶光转，一夜鱼龙舞。",gloss:"玉壶一样的光亮转来转去，照着元夕的灯市。",yi:90,tags:["清雅","典雅"]},
+{n:"长亭",py:"cháng tíng",tones:[2,2],g:"通用",src:"宋词",work:"柳永《雨霖铃》",line:"寒蝉凄切，对长亭晚，骤雨初歇。",gloss:"傍晚对着长亭，寒蝉叫得凄切，骤雨刚刚停歇。",yi:89,tags:["清雅","文雅"]},
+{n:"兰舟",py:"lán zhōu",tones:[2,1],g:"通用",src:"宋词",work:"柳永《雨霖铃》",line:"都门帐饮无绪，留恋处，兰舟催发。",gloss:"木兰做的小船催着出发，留恋也留不住，只好上船。",yi:90,tags:["清雅","灵动"]},
+{n:"晓风",py:"xiǎo fēng",tones:[3,1],g:"通用",src:"宋词",work:"柳永《雨霖铃》",line:"杨柳岸，晓风残月。",gloss:"杨柳岸边，清晨的风和残缺的月亮，离别的清晨格外安静。",yi:91,tags:["清雅","明朗"]},
+{n:"燕归",py:"yàn guī",tones:[4,1],g:"女",src:"宋词",work:"晏殊《浣溪沙》",line:"无可奈何花落去，似曾相识燕归来。",gloss:"花落了无可奈何，燕子却似曾相识地飞回来，旧事重逢。",yi:91,tags:["温柔","灵动"]},
+{n:"薇",py:"wēi",tones:[1],g:"女",src:"诗经",work:"诗经·小雅·采薇",line:"采薇采薇，薇亦作止。",gloss:"野菜名，采薇的人一边采一边唱，质朴又坚韧。",yi:90,tags:["清雅","坚韧"]},
+{n:"衿",py:"jīn",tones:[1],g:"通用",src:"诗经",work:"诗经·郑风·子衿",line:"青青子衿，悠悠我心。",gloss:"衣领，借指读书人，文气藏在衣服的细节里。",yi:89,tags:["清雅","文雅"]},
+{n:"兰",py:"lán",tones:[2],g:"女",src:"楚辞",work:"楚辞·离骚",line:"扈江离与辟芷兮，纫秋兰以为佩。",gloss:"兰花香洁，佩在身上，提醒自己守住清香。",yi:91,tags:["清雅","温柔"]},
+{n:"瑾",py:"jǐn",tones:[3],g:"通用",src:"楚辞",work:"楚辞·九章·怀沙",line:"怀瑾握瑜兮，穷不知所示。",gloss:"美玉名，怀抱美玉的人，处境再难也不改本色。",yi:91,tags:["典雅","清雅"]},
+{n:"月",py:"yuè",tones:[4],g:"女",src:"唐诗",work:"李白《静夜思》",line:"举头望明月，低头思故乡。",gloss:"一轮明月，人人抬头都能看见，也人人各有乡愁。",yi:91,tags:["明朗","清雅"]},
+{n:"云",py:"yún",tones:[2],g:"通用",src:"唐诗",work:"李白《独坐敬亭山》",line:"众鸟高飞尽，孤云独去闲。",gloss:"天上的一片云，独自飘走，闲淡自在。",yi:89,tags:["清雅","坚韧"]},
+{n:"风",py:"fēng",tones:[1],g:"男",src:"唐诗",work:"李白《行路难》",line:"长风破浪会有时，直挂云帆济沧海。",gloss:"大风会来，船帆会张满，取其顺势而为的豪气。",yi:91,tags:["豪迈","明朗"]},
+{n:"江",py:"jiāng",tones:[1],g:"男",src:"唐诗",work:"杜甫《登高》",line:"无边落木萧萧下，不尽长江滚滚来。",gloss:"江水滚滚不尽，流向远方，取其不回头的气势。",yi:90,tags:["豪迈","坚韧"]}
+];
+const WUXING={江:"水",河:"水",海:"水",涛:"水",雨:"水",雪:"水",霜:"水",露:"水",清:"水",润:"水",沅:"水",澧:"水",泉:"水",湖:"水",溪:"水",波:"水",澜:"水",泽:"水",淑:"水",涵:"水",沐:"水",冰:"水",洁:"水",湘:"水",淮:"水",桃:"木",柳:"木",杨:"木",松:"木",林:"木",梅:"木",兰:"木",薇:"木",芳:"木",菲:"木",芷:"木",桂:"木",桐:"木",枫:"木",柏:"木",梓:"木",菊:"木",荷:"木",莲:"木",竹:"木",草:"木",花:"木",叶:"木",桑:"木",杏:"木",梨:"木",栋:"木",金:"金",铭:"金",锦:"金",锋:"金",锐:"金",钰:"金",铃:"金",银:"金",钟:"金",鑫:"金",钊:"金",火:"火",炎:"火",灿:"火",灼:"火",煜:"火",晓:"火",晴:"火",阳:"火",晖:"火",灯:"火",烨:"火",烛:"火",焰:"火",山:"土",岩:"土",坤:"土",培:"土",城:"土",垣:"土",堂:"土",壤:"土",地:"土",均:"土",坚:"土",垒:"土",垚:"土"};
+const SURNAMES=[
+["王","常见说法出自姬姓，周王室后代以王为氏。"],["李","常见说法出自嬴姓，以理官之职或李树为氏。"],["张","常见说法出自姬姓，以弓箭制作之艺为氏。"],["刘","常见说法出自祁姓，以封地为氏。"],["陈","常见说法出自妫姓，以封国陈国为氏。"],["杨","常见说法出自姬姓，以封地杨国为氏。"],["黄","常见说法出自嬴姓，以封国黄国为氏。"],["周","常见说法出自姬姓，以封地周原为氏。"],["吴","常见说法出自姬姓，以封国吴国为氏。"],["徐","常见说法出自嬴姓，以封国徐国为氏。"],["孙","常见说法出自妫姓、姬姓等多源，以孙为氏。"],["胡","常见说法出自妫姓、姬姓等多源，以封地为氏。"],["朱","常见说法出自曹姓，以封地朱为氏。"],["高","常见说法出自姜姓，以公子高的字为氏。"],["林","常见说法出自子姓，以林为氏。"],["何","常见说法出自姬姓，以封地为氏。"],["郭","常见说法出自姬姓，以封地郭为氏。"],["马","常见说法出自嬴姓，以官职司马为氏。"],["罗","常见说法出自妘姓，以封国罗国为氏。"],["梁","常见说法出自嬴姓，以封国梁国为氏。"],["宋","常见说法出自子姓，以封国宋国为氏。"],["郑","常见说法出自姬姓，以封国郑国为氏。"],["谢","常见说法出自姜姓，以封国谢国为氏。"],["韩","常见说法出自姬姓，以封国韩国为氏。"],["唐","常见说法出自祁姓、姬姓等多源，以封地唐为氏。"],["冯","常见说法出自姬姓，以封地冯为氏。"],["于","常见说法出自姬姓，以封国于为氏。"],["董","常见说法出自己姓，以官职董为氏。"],["萧","常见说法出自子姓，以封地萧为氏。"],["程","常见说法出自风姓、姬姓等多源，以封地程为氏。"],["曹","常见说法出自姬姓，以封国曹国为氏。"],["袁","常见说法出自妫姓，以封地袁为氏。"],["邓","常见说法出自曼姓，以封国邓国为氏。"],["许","常见说法出自姜姓，以封国许国为氏。"],["傅","常见说法出自姬姓，以官职傅为氏。"],["沈","常见说法出自姬姓，以封国沈国为氏。"],["曾","常见说法出自姒姓，以封国鄫为氏。"],["彭","常见说法出自彭姓，以封国大彭为氏。"],["吕","常见说法出自姜姓，以封国吕国为氏。"],["苏","常见说法出自己姓，以封国苏国为氏。"]
+];
+function toneScore(e){if(e.tones.length===1)return 88;return e.tones[0]!==e.tones[1]?92:78;}
+function scoreOf(e){var yun=toneScore(e);var dian={"诗经":92,"楚辞":90,"唐诗":91,"宋词":90}[e.src]||90;var total=Math.round(e.yi*0.4+yun*0.3+dian*0.3);return{total:total,yi:e.yi,yun:yun,dian:dian};}
+function filterNames(o){var list=NAMES.filter(function(e){
+  if(o.src&&e.src!==o.src)return false;
+  if(o.len&&e.n.length!==Number(o.len))return false;
+  if(o.gender&&(e.g!==o.gender&&e.g!=="通用"))return false;
+  if(o.style&&e.tags.indexOf(o.style)<0)return false;
+  if(o.wanted&&e.n.indexOf(o.wanted)<0)return false;
+  if(o.unwanted){for(var i=0;i<o.unwanted.length;i++){if(e.n.indexOf(o.unwanted[i])>=0)return false;}}
+  return true;});
+  list.sort(function(a,b){return scoreOf(b).total-scoreOf(a).total||a.n.localeCompare(b.n,"zh-CN");});
+  return list;}
+function findEntry(given){for(var i=0;i<NAMES.length;i++){if(NAMES[i].n===given)return NAMES[i];}return null;}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+if(typeof document!=="undefined"){
+var CHARPY={};
+NAMES.forEach(function(e){var syl=e.py.split(" ");for(var i=0;i<e.n.length;i++){if(!CHARPY[e.n[i]])CHARPY[e.n[i]]=syl[i]||"";}});
+function loadJson(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v==null?def:v;}catch(err){return def;}}
+function saveJson(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(err){}}
+var favs=loadJson("mscl_favs",[]);
+var hist=loadJson("mscl_hist",[]);
+function favKey(s,g){return s+"|"+g;}
+function isFav(s,g){return favs.some(function(f){return favKey(f.s,f.g)===favKey(s,g);});}
+function pushHist(s,g,work){var k=favKey(s,g);hist=hist.filter(function(h){return favKey(h.s,h.g)!==k;});hist.unshift({s:s,g:g,w:work});hist=hist.slice(0,20);saveJson("mscl_hist",hist);renderMine();}
+function wuxingOf(ch){return WUXING[ch]||"未收录";}
+function breakdownHtml(e){var s=scoreOf(e);return '<div class="kv"><span>寓意分（编辑评注）40%</span><b>'+s.yi+'</b></div><div class="bar"><i style="width:'+s.yi+'%"></i></div><div class="kv"><span>音律分（声调不同 92 / 同调 78 / 单字 88）30%</span><b>'+s.yun+'</b></div><div class="bar"><i style="width:'+s.yun+'%"></i></div><div class="kv"><span>典籍分（'+esc(e.src)+'）30%</span><b>'+s.dian+'</b></div><div class="bar"><i style="width:'+s.dian+'%"></i></div><p class="hint">总分 = 寓意×0.4 + 音律×0.3 + 典籍×0.3，四舍五入。仅供参考。</p>';}
+function showDetail(surname,e){
+  var s=scoreOf(e);var full=surname+e.n;pushHist(surname,e.n,e.work);
+  var wx=e.n.split("").map(function(ch){return ch+"："+wuxingOf(ch);}).join("　");
+  var fav=isFav(surname,e.n);
+  var el=document.getElementById("detail");
+  el.classList.remove("hidden");
+  el.innerHTML='<div class="card"><button class="btn ghost small" id="btn-back">← 返回结果</button>'
+  +'<h2 style="margin:10px 0 2px"><span class="serif" style="font-size:30px;color:var(--indigo)">'+esc(full)+'</span></h2>'
+  +'<p style="margin:0">'+esc(surname)+esc(e.n)+' · '+esc(e.py)+' · <span class="score">'+s.total+' 分</span></p>'
+  +'<p><span class="tag">'+esc(e.src)+'</span><span class="tag">'+esc(e.work)+'</span>'+e.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("")+'</p>'
+  +'<p>'+esc(e.gloss)+'</p>'
+  +'<div class="poem">'+esc(e.line)+'<br><span style="font-size:13px;color:var(--muted)">—— '+esc(e.work)+'</span></div>'
+  +'<div style="height:10px"></div>'+breakdownHtml(e)
+  +'<p class="hint">五行（传统说法，仅供参考）：'+esc(wx)+'</p>'
+  +'<div class="row"><div><button class="btn gold" id="btn-fav">'+(fav?"★ 已收藏":"☆ 收藏")+'</button></div><div><button class="btn ghost" id="btn-copy">复制名字</button></div></div></div>';
+  document.getElementById("btn-back").onclick=function(){el.classList.add("hidden");el.innerHTML="";document.getElementById("results").scrollIntoView();};
+  document.getElementById("btn-fav").onclick=function(){if(isFav(surname,e.n)){favs=favs.filter(function(f){return favKey(f.s,f.g)!==favKey(surname,e.n);});}else{favs.unshift({s:surname,g:e.n,w:e.work});}saveJson("mscl_favs",favs);renderMine();showDetail(surname,e);};
+  document.getElementById("btn-copy").onclick=function(){var done=function(){var b=document.getElementById("btn-copy");if(b)b.textContent="已复制";};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(full).then(done,done);}else{var ta=document.createElement("textarea");ta.value=full;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(err){}document.body.removeChild(ta);done();}};
+  el.scrollIntoView();
+}
+function renderResults(list,surname,bdate,btime){
+  var box=document.getElementById("results");var det=document.getElementById("detail");det.classList.add("hidden");det.innerHTML="";
+  var note=document.getElementById("gen-note");
+  var rec="";if(bdate||btime){rec="出生记录："+(bdate||"未填日期")+" "+(btime||"")+"（仅记录，不影响评分）。";}
+  if(!list.length){box.innerHTML='<div class="card">没有符合条件的名字，试试放宽出处、风格或字数。</div>';note.textContent=rec;return;}
+  note.textContent=rec+"共 "+list.length+" 个候选，显示前 "+Math.min(30,list.length)+" 个，按本应用参考分排序。";
+  box.innerHTML=list.slice(0,30).map(function(e){var s=scoreOf(e);return '<button class="result-card" data-given="'+esc(e.n)+'"><span class="nm">'+esc(surname)+esc(e.n)+'</span> <span style="color:var(--muted)">'+esc(e.py)+'</span> <span class="score" style="float:right">'+s.total+' 分</span><br><span class="tag">'+esc(e.src)+'</span><span class="tag">'+esc(e.work)+'</span>'+e.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("")+'<br><span style="font-size:13px;color:var(--muted)">'+esc(e.gloss)+'</span></button>';}).join("");
+  box.querySelectorAll(".result-card").forEach(function(b){b.onclick=function(){var e=findEntry(b.getAttribute("data-given"));if(e)showDetail(surname,e);};});
+}
+document.getElementById("btn-gen").onclick=function(){
+  var surname=(document.getElementById("f-surname").value||"王").trim().slice(0,2)||"王";
+  var list=filterNames({gender:document.getElementById("f-gender").value,src:document.getElementById("f-src").value,len:document.getElementById("f-len").value,style:document.getElementById("f-style").value,wanted:(document.getElementById("f-wanted").value||"").trim(),unwanted:(document.getElementById("f-unwanted").value||"").trim()});
+  renderResults(list,surname,document.getElementById("f-bdate").value,document.getElementById("f-btime").value);
+};
+document.getElementById("btn-test").onclick=function(){
+  var full=(document.getElementById("t-name").value||"").trim();var out=document.getElementById("test-out");
+  if(full.length<2){out.innerHTML='<div class="card">请输入至少 2 个字的全名。</div>';return;}
+  var surname=full[0];var given=full.slice(1);var e=findEntry(given);
+  var rows=full.split("").map(function(ch){return '<div class="kv"><span>'+esc(ch)+'</span><span>拼音 '+(CHARPY[ch]||"未收录")+' · 五行（传统说法） '+(wuxingOf(ch))+'</span></div>';}).join("");
+  if(e){var s=scoreOf(e);pushHist(surname,e.n,e.work);out.innerHTML='<div class="card"><h3 style="margin:0 0 4px"><span class="serif" style="font-size:26px;color:var(--indigo)">'+esc(full)+'</span> <span class="score">'+s.total+' 分</span></h3><p>'+esc(e.gloss)+'</p><div class="poem">'+esc(e.line)+'<br><span style="font-size:13px;color:var(--muted)">—— '+esc(e.work)+'</span></div><div style="height:10px"></div>'+breakdownHtml(e)+rows+'<div style="height:10px"></div><button class="btn ghost small" id="btn-test-detail">查看详情 / 收藏</button></div>';
+    document.getElementById("btn-test-detail").onclick=function(){switchTab("tab-name");showDetail(surname,e);};
+  }else{out.innerHTML='<div class="card"><h3 style="margin:0 0 4px"><span class="serif" style="font-size:26px;color:var(--indigo)">'+esc(full)+'</span></h3><p class="hint">该名字未收录在本应用的原创名字库中，以下只显示逐字信息，不编造出处与评分。</p>'+rows+'<p class="hint">如需有出处的候选名字，请到“起名”页按条件生成。</p></div>';}
+};
+var poemSrc="";
+function poemGroups(){var m={};NAMES.forEach(function(e){var k=e.line+"|"+e.work;if(!m[k])m[k]={line:e.line,work:e.work,src:e.src,entries:[]};m[k].entries.push(e);});return Object.keys(m).map(function(k){return m[k];});}
+function renderPoems(){
+  var q=(document.getElementById("p-q").value||"").trim();
+  var list=poemGroups().filter(function(g){if(poemSrc&&g.src!==poemSrc)return false;if(q&&(g.line.indexOf(q)<0&&g.work.indexOf(q)<0))return false;return true;});
+  var box=document.getElementById("poem-list");
+  if(!list.length){box.innerHTML='<div class="card">没有匹配的诗句，换个关键字试试。</div>';return;}
+  box.innerHTML=list.map(function(g,i){return '<button class="result-card" data-pi="'+i+'"><span class="serif" style="font-size:17px">'+esc(g.line)+'</span><br><span style="font-size:13px;color:var(--muted)">'+esc(g.work)+' · '+esc(g.src)+' · 本库有 '+g.entries.length+' 个名字取自此句</span></button>';}).join("");
+  box.querySelectorAll(".result-card").forEach(function(b){b.onclick=function(){var g=list[Number(b.getAttribute("data-pi"))];var surname=(document.getElementById("f-surname").value||"王").trim()||"王";document.getElementById("poem-names").innerHTML='<div class="card"><h3 style="margin:0 0 6px">取自此句的名字</h3><div class="poem">'+esc(g.line)+'<br><span style="font-size:13px;color:var(--muted)">—— '+esc(g.work)+'</span></div>'+g.entries.map(function(e){return '<div class="kv"><span>'+esc(surname)+esc(e.n)+' · '+esc(e.py)+'</span><b>'+scoreOf(e).total+' 分</b></div>';}).join("")+'</div>';document.getElementById("poem-names").scrollIntoView();};});
+}
+document.getElementById("p-q").addEventListener("input",renderPoems);
+var chipsBox=document.getElementById("p-chips");
+["","诗经","楚辞","唐诗","宋词"].forEach(function(s){var b=document.createElement("button");b.className="chip"+(s===""?" on":"");b.textContent=s===""?"全部":s;b.onclick=function(){poemSrc=s;chipsBox.querySelectorAll(".chip").forEach(function(c){c.classList.remove("on");});b.classList.add("on");renderPoems();};chipsBox.appendChild(b);});
+renderPoems();
+var grid=document.getElementById("surname-grid");
+SURNAMES.forEach(function(pair){var b=document.createElement("button");b.textContent=pair[0];b.onclick=function(){document.getElementById("f-surname").value=pair[0];document.getElementById("surname-note").innerHTML='<div class="card" style="margin:0"><b class="serif">'+esc(pair[0])+'姓</b>：'+esc(pair[1])+'</div>';switchTab("tab-name");};grid.appendChild(b);});
+function renderMine(){
+  var fl=document.getElementById("fav-list");
+  fl.innerHTML=favs.length?favs.map(function(f,i){return '<div class="kv"><span>'+esc(f.s)+esc(f.g)+' · '+esc(f.w)+'</span><button class="btn ghost small" data-fi="'+i+'">查看</button></div>';}).join(""):'<p class="hint">还没有收藏。在起名结果里点进详情，再点“收藏”。</p>';
+  fl.querySelectorAll("button").forEach(function(b){b.onclick=function(){var f=favs[Number(b.getAttribute("data-fi"))];var e=findEntry(f.g);if(e){switchTab("tab-name");showDetail(f.s,e);}};});
+  var hl=document.getElementById("hist-list");
+  hl.innerHTML=hist.length?hist.map(function(h){return '<div class="kv"><span>'+esc(h.s)+esc(h.g)+' · '+esc(h.w)+'</span></div>';}).join(""):'<p class="hint">暂无记录。</p>';
+}
+document.getElementById("btn-clear-fav").onclick=function(){favs=[];saveJson("mscl_favs",favs);renderMine();};
+document.getElementById("btn-clear-hist").onclick=function(){hist=[];saveJson("mscl_hist",hist);renderMine();};
+renderMine();
+function switchTab(id){document.querySelectorAll(".tabpage").forEach(function(p){p.classList.toggle("active",p.id===id);});document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-tab")===id);});window.scrollTo(0,0);}
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){switchTab(b.getAttribute("data-tab"));};});
+}
+</script>
+</body>
+</html>
